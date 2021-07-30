@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 1306646833271779635}
   - component: {fileID: 6462420673207944066}
   m_Layer: 0
-  m_Name: HubUIWorkerSlotPrefab
+  m_Name: HubUIWorkerSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
