@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace BeastHunter
 {
-    public interface IRoom
+    public interface IRoomHandler
     {
-        
+        Task MoveTo(RoomType room);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RoomMover;
 using UnityEngine;
 
 
@@ -9,6 +10,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         [SerializeField] GameObject _messagePanel;
+        [SerializeField] private RoomMoverBehaviour _roomMover;
 
         private HubUIContext _context;
         private HubUIData _data;

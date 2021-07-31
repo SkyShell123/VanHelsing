@@ -1,7 +1,9 @@
+using UnityEngine;
+
 namespace BeastHunter
 {
-    public class IRoom
+    public interface IRoom
     {
-        
+        Vector3 Position { get; }
     }
 }
