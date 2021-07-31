@@ -41,6 +41,7 @@ namespace BeastHunterHubUI
             Add(_mapBehaviour);
             Add(_questRoomUIBehaviour);
             Add(_workRoomUIBehaviour);
+            Add(_roomMover);
         }
 
         private void Start()

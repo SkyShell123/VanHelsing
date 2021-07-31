@@ -1,6 +1,6 @@
 namespace RoomMover
 {
-    public class TestRoom
+    public class TestRoom: AbstractRoom
     {
         
     }

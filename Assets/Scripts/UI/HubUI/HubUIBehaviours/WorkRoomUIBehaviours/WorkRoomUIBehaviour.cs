@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using BeastHunter;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace BeastHunterHubUI
 {
-    class WorkRoomUIBehaviour : MonoBehaviour, IStart, IDestroy
+    class WorkRoomUIBehaviour : MonoBehaviour, IStart, IDestroy, IHubUI
     {
         #region Fields
 
@@ -368,6 +369,7 @@ namespace BeastHunterHubUI
 
         private void FillRoomPanel(WorkRoomModel room)
         {
+            OnChangeRoom.Invoke(room.RoomType);
             _roomNameText.text = room.Name;
             _roomLevelText.text = $"Ур. {room.Level}";
 
@@ -536,5 +538,16 @@ namespace BeastHunterHubUI
         #endregion
 
         #endregion
+
+        public event Action<WorkRoomType> OnChangeRoom = type => { };
+        public void Close()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void Open()
+        {
+            gameObject.SetActive(true);
+        }
     }
 }
