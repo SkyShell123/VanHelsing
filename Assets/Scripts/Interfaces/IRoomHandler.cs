@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using BeastHunterHubUI;
 
 namespace BeastHunter
 {
     public interface IRoomHandler
     {
-        Task MoveTo(RoomType room);
+        Task MoveTo(WorkRoomType room);
     }
 }

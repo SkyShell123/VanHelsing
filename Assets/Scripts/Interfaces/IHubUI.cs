@@ -1,10 +1,11 @@
 using System;
+using BeastHunterHubUI;
 
 namespace BeastHunter
 {
     public interface IHubUI
     {
-        event Action<RoomType> OnChangeRoom;
+        event Action<WorkRoomType> OnChangeRoom;
         void Close();
         void Open();
     }
