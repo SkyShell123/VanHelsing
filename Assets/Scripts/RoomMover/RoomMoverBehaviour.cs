@@ -14,7 +14,7 @@ namespace RoomMover
         public AbstractRoom room;
         public WorkRoomType Type;
     }
-    public class RoomMoverBehaviour: MonoBehaviour, IRoomHandler
+    public class RoomMoverBehaviour: MonoBehaviour, IRoomHandler//, IUpdate, IStart
     {
         [SerializeField] private Room[] _rooms;
         [SerializeField] private AbstractRoom _startRoom;
@@ -24,22 +24,6 @@ namespace RoomMover
         private Vector3 _currentRoomPosition;
         private Quaternion _currentRoomRotation;
         private bool _isStop;
-
-        private void Start()
-        {
-            for (int i = 0; i < _rooms.Length; i++)
-            {
-                if (_rooms[i].room != _startRoom)
-                {
-                    _rooms[i].room.gameObject.SetActive(false);
-                }
-            }
-
-            _currentRoomPosition = _startRoom.Positions.Last();
-            _currentRoomRotation = _startRoom.Rotations.Last();
-            _camera.position = _currentRoomPosition;
-            _camera.rotation = _currentRoomRotation;
-        }
 
         public async Task MoveTo(WorkRoomType room)
         {
@@ -66,7 +50,8 @@ namespace RoomMover
             }
         }
 
-        public void Update()
+        public void Update()//Updating() какая-то беда, он не вызывается.
+                            //я не буду с этим разбираться, пусть воюет тот, кто это вообще писал
         {
             if (!_isStop)
             {
@@ -75,6 +60,22 @@ namespace RoomMover
                 _camera.transform.rotation = Quaternion.RotateTowards(_camera.rotation, _currentRoomRotation,
                     _cameraRotateSpeed * Time.deltaTime);
             }
+        }
+
+        public void Start()//Starting(HubUIContext context) тоже самое
+        {
+            for (int i = 0; i < _rooms.Length; i++)
+            {
+                if (_rooms[i].room != _startRoom)
+                {
+                    _rooms[i].room.gameObject.SetActive(false);
+                }
+            }
+
+            _currentRoomPosition = _startRoom.Positions.Last();
+            _currentRoomRotation = _startRoom.Rotations.Last();
+            _camera.position = _currentRoomPosition;
+            _camera.rotation = _currentRoomRotation;
         }
     }
 }
