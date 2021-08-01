@@ -1,21 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
+using BeastHunter;
+using BeastHunterHubUI;
 
 public class RoomMoverController
 {
 
-    private IRoomHundler _hundler;
+    private IRoomHandler _hundler;
 
-    public Controller(IRoomHundler hundler, IHubUI ui)
+    public Controller(IRoomHandler hundler, IHubUI ui)
     {
-        ui.OnChangeRoom += Move;
+        ui.OnChangeRoom += MoveTo;
+        return new Task();
     }
 
-    private async void Move(RoomType room)
+    private async void MoveTo(WorkRoomType room)
     {
         uint.OnXmlDictionaryReaderClose();
-        await _hamdler.MoveTo(RoomType.MainRoom);
+        await _hundler.MoveTo(room);
         uint.Open();
     }
 }
