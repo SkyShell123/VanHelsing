@@ -4,6 +4,7 @@ namespace BeastHunter
 {
     public interface IRoom
     {
-        Vector3 Position { get; }
+        Vector3[] Positions { get; }
+        Quaternion[] Rotations { get; }
     }
 }

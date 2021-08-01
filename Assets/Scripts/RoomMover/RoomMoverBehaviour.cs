@@ -14,34 +14,40 @@ namespace RoomMover
         public AbstractRoom room;
         public WorkRoomType Type;
     }
-    public class RoomMoverBehaviour: MonoBehaviour, IRoomHandler, IUpdate
+    public class RoomMoverBehaviour: MonoBehaviour, IRoomHandler
     {
         [SerializeField] private Room[] _rooms;
         [SerializeField] private Camera _camera;
         private Vector3 _currentRoomPosition;
+        private Quaternion _currentRoomRotation;
         private bool _isStop;
+
+        private void Start()
+        {
+            _currentRoomPosition = _camera.transform.position;
+        }
 
         public async Task MoveTo(WorkRoomType room)
         {
-            Debug.Log(room);
-            Room initialRoom = _rooms.FirstOrDefault(x => x.Type == room);
-            if (initialRoom.room != null)
+            AbstractRoom initialRoom = _rooms.FirstOrDefault(x => x.Type == room).room;
+            if (initialRoom != null)
             {
-                _currentRoomPosition = initialRoom.room.Position;
+                _currentRoomPosition = initialRoom.Position;
             }
             _isStop = false;
-            while (_camera.transform.position != _currentRoomPosition)
+            while (!_isStop)
             {
                 await Task.Yield();
             }
         }
 
-        public void Updating()
+        public void Update()
         {
             if (_camera.transform.position != _currentRoomPosition)
             {
-                _camera.transform.position =
-                    Vector3.LerpUnclamped(_camera.transform.position, _currentRoomPosition, 10);
+                _camera.transform.position = 
+                    Vector3.MoveTowards(_camera.transform.position, _currentRoomPosition, 2.0f * Time.deltaTime);
+                /*_camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _currentRoomRotation, )*/
             }
             else if (!_isStop)
             {
