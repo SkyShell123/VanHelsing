@@ -30,28 +30,26 @@ namespace RoomMover
         public async Task MoveTo(WorkRoomType room)
         {
             AbstractRoom initialRoom = _rooms.FirstOrDefault(x => x.Type == room).room;
-            if (initialRoom != null)
-            {
-                _currentRoomPosition = initialRoom.Position;
-            }
             _isStop = false;
-            while (!_isStop)
+            for (int i = 0; i < initialRoom.Positions.Length; i++)
             {
-                await Task.Yield();
+                _currentRoomPosition = initialRoom.Positions[i];
+                _currentRoomRotation = initialRoom.Rotations[i];
+                while (_camera.transform.position != _currentRoomPosition)
+                {
+                    await Task.Yield();
+                }
             }
+            _isStop = true;
         }
 
         public void Update()
         {
-            if (_camera.transform.position != _currentRoomPosition)
+            if (_camera.transform.position != _currentRoomPosition && !_isStop)
             {
                 _camera.transform.position = 
                     Vector3.MoveTowards(_camera.transform.position, _currentRoomPosition, 2.0f * Time.deltaTime);
                 /*_camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _currentRoomRotation, )*/
-            }
-            else if (!_isStop)
-            {
-                _isStop = true;
             }
         }
     }
