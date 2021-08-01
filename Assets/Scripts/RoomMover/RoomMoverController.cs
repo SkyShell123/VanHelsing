@@ -1,26 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Threading;
-using System.Threading.Tasks;
+using System;
 using BeastHunter;
 using BeastHunterHubUI;
 
-public class RoomMoverController
+
+public class RoomMoverController: IDisposable
 {
-
     private IRoomHandler _hundler;
+    private IHubUI _ui;
 
-    public Controller(IRoomHandler hundler, IHubUI ui)
+    public RoomMoverController(IRoomHandler hundler, IHubUI ui)
     {
         ui.OnChangeRoom += MoveTo;
-        return new Task();
+        _hundler = hundler;
+        _ui = ui;
     }
 
     private async void MoveTo(WorkRoomType room)
     {
-        uint.OnXmlDictionaryReaderClose();
+        _ui.Close();
         await _hundler.MoveTo(room);
-        uint.Open();
+        _ui.Open();
+    }
+
+    public void Dispose()
+    {
+        _ui.OnChangeRoom -= MoveTo;
     }
 }

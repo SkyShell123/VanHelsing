@@ -23,6 +23,7 @@ namespace RoomMover
 
         public async Task MoveTo(WorkRoomType room)
         {
+            Debug.Log(room);
             Room initialRoom = _rooms.FirstOrDefault(x => x.Type == room);
             if (initialRoom.room != null)
             {

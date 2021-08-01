@@ -22,6 +22,7 @@ namespace BeastHunterHubUI
         private MapRoomUIBehaviour _mapBehaviour;
         private QuestRoomUIBehaviour _questRoomUIBehaviour;
         private WorkRoomUIBehaviour _workRoomUIBehaviour;
+        private RoomMoverController _roomMoverController;
 
         #endregion
 
@@ -58,6 +59,7 @@ namespace BeastHunterHubUI
             StartBehaviours(_context);
 
             _messagePanel.SetActive(false);
+            _roomMoverController = new RoomMoverController(_roomMover, _workRoomUIBehaviour);
         }
 
         private void Update()
@@ -77,6 +79,7 @@ namespace BeastHunterHubUI
 
             Unsubscribes();
             HubUIServices.SharedInstance.DisposeGameServices();
+            _roomMoverController.Dispose();
         }
 
         #endregion
