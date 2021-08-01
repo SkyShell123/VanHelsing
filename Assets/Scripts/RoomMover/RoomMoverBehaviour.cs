@@ -17,39 +17,63 @@ namespace RoomMover
     public class RoomMoverBehaviour: MonoBehaviour, IRoomHandler
     {
         [SerializeField] private Room[] _rooms;
-        [SerializeField] private Camera _camera;
+        [SerializeField] private AbstractRoom _startRoom;
+        [SerializeField] private Transform _camera;
+        [SerializeField] private float _cameraMoveSpeed;
+        [SerializeField] private float _cameraRotateSpeed;
         private Vector3 _currentRoomPosition;
         private Quaternion _currentRoomRotation;
         private bool _isStop;
 
         private void Start()
         {
-            _currentRoomPosition = _camera.transform.position;
+            for (int i = 0; i < _rooms.Length; i++)
+            {
+                if (_rooms[i].room != _startRoom)
+                {
+                    _rooms[i].room.gameObject.SetActive(false);
+                }
+            }
+
+            _currentRoomPosition = _startRoom.Positions.Last();
+            _currentRoomRotation = _startRoom.Rotations.Last();
+            _camera.position = _currentRoomPosition;
+            _camera.rotation = _currentRoomRotation;
         }
 
         public async Task MoveTo(WorkRoomType room)
         {
+            for (int i = 0; i < _rooms.Length; i++)
+            {
+                _rooms[i].room.gameObject.SetActive(true);
+            }
             AbstractRoom initialRoom = _rooms.FirstOrDefault(x => x.Type == room).room;
             _isStop = false;
             for (int i = 0; i < initialRoom.Positions.Length; i++)
             {
                 _currentRoomPosition = initialRoom.Positions[i];
                 _currentRoomRotation = initialRoom.Rotations[i];
-                while (_camera.transform.position != _currentRoomPosition)
+                while (_camera.position != _currentRoomPosition && _camera.rotation != _currentRoomRotation)
                 {
                     await Task.Yield();
                 }
             }
             _isStop = true;
+            for (int i = 0; i < _rooms.Length; i++)
+            {
+                if(_rooms[i].room == initialRoom) continue;
+                _rooms[i].room.gameObject.SetActive(false);
+            }
         }
 
         public void Update()
         {
-            if (_camera.transform.position != _currentRoomPosition && !_isStop)
+            if (!_isStop)
             {
                 _camera.transform.position = 
-                    Vector3.MoveTowards(_camera.transform.position, _currentRoomPosition, 2.0f * Time.deltaTime);
-                /*_camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _currentRoomRotation, )*/
+                    Vector3.MoveTowards(_camera.position, _currentRoomPosition, _cameraMoveSpeed * Time.deltaTime);
+                _camera.transform.rotation = Quaternion.RotateTowards(_camera.rotation, _currentRoomRotation,
+                    _cameraRotateSpeed * Time.deltaTime);
             }
         }
     }
