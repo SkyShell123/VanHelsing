@@ -37,7 +37,7 @@ namespace RoomMover
             {
                 _currentRoomPosition = initialRoom.Positions[i];
                 _currentRoomRotation = initialRoom.Rotations[i];
-                while (_camera.position != _currentRoomPosition && _camera.rotation != _currentRoomRotation)
+                while (_camera.position != _currentRoomPosition || _camera.rotation != _currentRoomRotation)
                 {
                     await Task.Yield();
                 }
