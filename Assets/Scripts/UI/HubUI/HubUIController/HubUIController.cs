@@ -11,6 +11,7 @@ namespace BeastHunterHubUI
 
         [SerializeField] GameObject _messagePanel;
         [SerializeField] private RoomMoverBehaviour _roomMover;
+        [SerializeField] private PathHandlerBehaviour _pathHandler;
 
         private HubUIContext _context;
         private HubUIData _data;
@@ -59,7 +60,8 @@ namespace BeastHunterHubUI
             StartBehaviours(_context);
 
             _messagePanel.SetActive(false);
-            _roomMoverController = new RoomMoverController(_roomMover, _workRoomUIBehaviour);
+            _roomMoverController = new RoomMoverController(_roomMover,
+                _workRoomUIBehaviour, _pathHandler);
         }
 
         private void Update()

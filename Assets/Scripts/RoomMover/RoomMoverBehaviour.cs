@@ -23,20 +23,19 @@ namespace RoomMover
         [SerializeField] private float _cameraRotateSpeed;
         private Vector3 _currentRoomPosition;
         private Quaternion _currentRoomRotation;
-        private bool _isStop;
+        private bool _isStop = true;
 
-        public async Task MoveTo(WorkRoomType room)
+        public async Task MoveTo(WorkRoomType room, Vector3[] positions)
         {
             for (int i = 0; i < _rooms.Length; i++)
             {
                 _rooms[i].room.gameObject.SetActive(true);
             }
-            AbstractRoom initialRoom = _rooms.FirstOrDefault(x => x.Type == room).room;
             _isStop = false;
-            for (int i = 0; i < initialRoom.Positions.Length; i++)
+            for (int i = 0; i < positions.Length; i++)
             {
-                _currentRoomPosition = initialRoom.Positions[i];
-                _currentRoomRotation = initialRoom.Rotations[i];
+                _currentRoomRotation = Quaternion.LookRotation(positions[i] - _currentRoomPosition);
+                _currentRoomPosition = positions[i];
                 while (_camera.position != _currentRoomPosition || _camera.rotation != _currentRoomRotation)
                 {
                     await Task.Yield();
@@ -45,7 +44,7 @@ namespace RoomMover
             _isStop = true;
             for (int i = 0; i < _rooms.Length; i++)
             {
-                if(_rooms[i].room == initialRoom) continue;
+                if(_rooms[i].Type == room) continue;
                 _rooms[i].room.gameObject.SetActive(false);
             }
         }
@@ -71,11 +70,6 @@ namespace RoomMover
                     _rooms[i].room.gameObject.SetActive(false);
                 }
             }
-
-            _currentRoomPosition = _startRoom.Positions.Last();
-            _currentRoomRotation = _startRoom.Rotations.Last();
-            _camera.position = _currentRoomPosition;
-            _camera.rotation = _currentRoomRotation;
         }
     }
 }
